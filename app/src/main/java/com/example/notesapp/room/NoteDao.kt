@@ -1,10 +1,11 @@
-package com.example.notesapp
+package com.example.notesapp.room
 
 import androidx.lifecycle.LiveData
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
+import com.example.notesapp.room.Note
 
 interface NoteDao {
 

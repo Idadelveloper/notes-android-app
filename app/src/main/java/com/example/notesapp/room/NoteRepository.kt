@@ -1,6 +1,8 @@
-package com.example.notesapp
+package com.example.notesapp.room
 
 import androidx.lifecycle.LiveData
+import com.example.notesapp.room.Note
+import com.example.notesapp.room.NoteDao
 
 class NoteRepository(private val notesDao: NoteDao) {
     val allNotes: LiveData<MutableList<Note>> = notesDao.getAllNotes()
