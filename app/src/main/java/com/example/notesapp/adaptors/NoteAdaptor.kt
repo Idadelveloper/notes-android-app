@@ -9,9 +9,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.notesapp.R
 import com.example.notesapp.room.Note
 
-class NoteAdaptor(val context: Context, val notesList: MutableList<Note>) : RecyclerView.Adapter<NoteAdaptor.NoteViewHolder>() {
+class NoteAdaptor() : RecyclerView.Adapter<NoteAdaptor.NoteViewHolder>() {
+    private var notesList: MutableList<Note> = mutableListOf()
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NoteViewHolder {
-        return NoteViewHolder(LayoutInflater.from(context).inflate(R.layout.note_item, parent, false))
+        return NoteViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.note_item, parent, false))
     }
 
     override fun onBindViewHolder(holder: NoteViewHolder, position: Int) {
@@ -23,6 +24,10 @@ class NoteAdaptor(val context: Context, val notesList: MutableList<Note>) : Recy
     }
 
     override fun getItemCount() = notesList.size
+
+    fun setNotes(notes: MutableList<Note>) {
+        notesList = notes
+    }
 
     inner class NoteViewHolder(view: View): RecyclerView.ViewHolder(view) {
         var textTitle: TextView = view.findViewById(R.id.text_view_title)
