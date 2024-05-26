@@ -20,7 +20,7 @@ import com.example.notesapp.room.NoteViewModel
 import com.example.notesapp.utils.Constants
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), NoteAdaptor.OnClickListener {
     private lateinit var noteViewModel: NoteViewModel
     private lateinit var recyclerView: RecyclerView
     private lateinit var notesAdaptor: NoteAdaptor
@@ -35,7 +35,7 @@ class MainActivity : AppCompatActivity() {
 
         addNoteButton = findViewById(R.id.add_note_button)
         recyclerView = findViewById(R.id.recycler_view)
-        notesAdaptor = NoteAdaptor()
+        notesAdaptor = NoteAdaptor(this)
         recyclerView.adapter = notesAdaptor
         recyclerView.layoutManager = LinearLayoutManager(this)
 
@@ -52,13 +52,22 @@ class MainActivity : AppCompatActivity() {
 
         getResult =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-                if (it.resultCode == Constants.REQUEST_CODE) {
+                if (it.resultCode == Constants.ADD_REQUEST_CODE) {
                     val title = it.data?.getStringExtra(Constants.EXTRA_TITLE)
                     val description = it.data?.getStringExtra(Constants.EXTRA_DESCRIPTION)
                     val priority = it.data?.getIntExtra(Constants.EXTRA_PRIORITY, -1)
 
                     val note = Note(title!!, description!!, priority!!)
                     noteViewModel.addNote(note)
+                } else if (it.resultCode == Constants.EDIT_REQUEST_CODE) {
+                    val title = it.data?.getStringExtra(Constants.EXTRA_TITLE)
+                    val description = it.data?.getStringExtra(Constants.EXTRA_DESCRIPTION)
+                    val priority = it.data?.getIntExtra(Constants.EXTRA_PRIORITY, -1)
+                    val id = it.data?.getIntExtra(Constants.EXTRA_ID, -1)
+
+                    val note = Note(title!!, description!!, priority!!)
+                    note.id = id!!
+                    noteViewModel.updateNote(note)
                 }
             }
 
@@ -95,5 +104,20 @@ class MainActivity : AppCompatActivity() {
         }
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    override fun onClickItem(note: Note) {
+        val title = note.title
+        val description = note.description
+        val priority = note.priority
+        val id = note.id
+
+        val intent = Intent(this@MainActivity, AddEditActivity::class.java)
+        intent.putExtra(Constants.EXTRA_TITLE, title)
+        intent.putExtra(Constants.EXTRA_DESCRIPTION, description)
+        intent.putExtra(Constants.EXTRA_PRIORITY, priority)
+        intent.putExtra(Constants.EXTRA_ID, id)
+
+        getResult.launch(intent)
     }
 }
