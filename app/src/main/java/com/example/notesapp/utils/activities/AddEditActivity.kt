@@ -1,4 +1,4 @@
-package com.example.notesapp.activities
+package com.example.notesapp.utils.activities
 
 import android.content.Intent
 import android.os.Bundle
@@ -29,6 +29,8 @@ class AddEditActivity : AppCompatActivity() {
 
         numberPicker.minValue = 0
         numberPicker.maxValue = 10
+
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_close)
         title = "Add Note"
 

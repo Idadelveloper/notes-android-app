@@ -13,10 +13,11 @@
         android:theme="@style/Theme.NotesApp"
         tools:targetApi="31">
         <activity
-            android:name=".activities.AddEditActivity"
-            android:exported="false" />
+            android:name=".utils.activities.AddEditActivity"
+            android:exported="false"
+            android:parentActivityName=".utils.activities.MainActivity"/>
         <activity
-            android:name=".MainActivity"
+            android:name=".utils.activities.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
