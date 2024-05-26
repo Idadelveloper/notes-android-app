@@ -19,6 +19,7 @@ import com.example.notesapp.room.Note
 import com.example.notesapp.room.NoteViewModel
 import com.example.notesapp.utils.Constants
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.android.material.snackbar.Snackbar
 
 class MainActivity : AppCompatActivity(), NoteAdaptor.OnClickListener {
     private lateinit var noteViewModel: NoteViewModel
@@ -47,7 +48,7 @@ class MainActivity : AppCompatActivity(), NoteAdaptor.OnClickListener {
 
         noteViewModel.allNotes.observe(this) {
             // here we can add the data to our recycler view
-            notesAdaptor.setNotes(it)
+            notesAdaptor.submitList(it)
         }
 
         getResult =
@@ -86,7 +87,12 @@ class MainActivity : AppCompatActivity(), NoteAdaptor.OnClickListener {
             }
 
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                val removedItem = notesAdaptor.getNoteAt(viewHolder.adapterPosition)
                 noteViewModel.deleteNote(notesAdaptor.getNoteAt(viewHolder.adapterPosition))
+
+                Snackbar.make(this@MainActivity, recyclerView, "Deleted note", Snackbar.LENGTH_LONG).setAction("UNDO") {
+                    noteViewModel.addNote(removedItem)
+                }.show()
             }
 
         }).attachToRecyclerView(recyclerView)
